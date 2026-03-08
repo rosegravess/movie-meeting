@@ -31,8 +31,14 @@ export default function Home() {
   const spinTimeout   = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const reload = useCallback(async () => {
-    const fresh: AppState = await fetch('/api/state').then((r) => r.json());
-    setAppState(fresh);
+    try {
+      const res = await fetch('/api/state');
+      const fresh = await res.json();
+      if (res.ok) setAppState(fresh);
+      else console.error('[reload] /api/state error:', fresh);
+    } catch (err) {
+      console.error('[reload] fetch failed:', err);
+    }
   }, []);
 
   useEffect(() => { reload(); }, [reload]);

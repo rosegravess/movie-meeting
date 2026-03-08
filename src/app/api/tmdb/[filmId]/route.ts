@@ -4,6 +4,8 @@ import { FILMS } from '@/lib/data';
 const KEY  = process.env.TMDB_API_KEY!;
 const BASE = 'https://api.themoviedb.org/3';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   _req: Request,
   { params }: { params: { filmId: string } }

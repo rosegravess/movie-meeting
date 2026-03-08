@@ -16,36 +16,41 @@ async function ensureSeeded() {
 }
 
 export async function GET() {
-  await ensureSeeded();
+  try {
+    await ensureSeeded();
 
-  const [filmStateRows, submissionRows, weekRows, reviewRows] = await Promise.all([
-    prisma.filmState.findMany(),
-    prisma.submission.findMany(),
-    prisma.week.findMany({ orderBy: { weekNum: 'asc' } }),
-    prisma.review.findMany(),
-  ]);
+    const [filmStateRows, submissionRows, weekRows, reviewRows] = await Promise.all([
+      prisma.filmState.findMany(),
+      prisma.submission.findMany(),
+      prisma.week.findMany({ orderBy: { weekNum: 'asc' } }),
+      prisma.review.findMany(),
+    ]);
 
-  const filmStates: Record<string, FilmStatus> = {};
-  filmStateRows.forEach((r) => { filmStates[r.id] = r.status as FilmStatus; });
+    const filmStates: Record<string, FilmStatus> = {};
+    filmStateRows.forEach((r) => { filmStates[r.id] = r.status as FilmStatus; });
 
-  const submissions: Record<string, Record<string, boolean>> = {};
-  submissionRows.forEach((r) => {
-    if (!submissions[r.filmId]) submissions[r.filmId] = {};
-    submissions[r.filmId][r.memberId] = r.submitted;
-  });
+    const submissions: Record<string, Record<string, boolean>> = {};
+    submissionRows.forEach((r) => {
+      if (!submissions[r.filmId]) submissions[r.filmId] = {};
+      submissions[r.filmId][r.memberId] = r.submitted;
+    });
 
-  const reviews: AppState['reviews'] = {};
-  reviewRows.forEach((r) => {
-    if (!reviews[r.filmId]) reviews[r.filmId] = {};
-    reviews[r.filmId][r.memberId] = { stars: r.stars, text: r.text };
-  });
+    const reviews: AppState['reviews'] = {};
+    reviewRows.forEach((r) => {
+      if (!reviews[r.filmId]) reviews[r.filmId] = {};
+      reviews[r.filmId][r.memberId] = { stars: r.stars, text: r.text };
+    });
 
-  const state: AppState = {
-    filmStates,
-    submissions,
-    weeks: weekRows.map((w) => ({ id: w.id, filmId: w.filmId, weekNum: w.weekNum, date: w.date })),
-    reviews,
-  };
+    const state: AppState = {
+      filmStates,
+      submissions,
+      weeks: weekRows.map((w) => ({ id: w.id, filmId: w.filmId, weekNum: w.weekNum, date: w.date })),
+      reviews,
+    };
 
-  return NextResponse.json(state);
+    return NextResponse.json(state);
+  } catch (err) {
+    console.error('[GET /api/state]', err);
+    return NextResponse.json({ error: String(err) }, { status: 500 });
+  }
 }
