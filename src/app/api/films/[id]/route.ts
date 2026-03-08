@@ -18,9 +18,10 @@ export async function PATCH(request: Request, { params }: Params) {
     });
   }
 
-  const updated = await prisma.filmState.update({
+  const updated = await prisma.filmState.upsert({
     where: { id: filmId },
-    data: { status },
+    update: { status },
+    create: { id: filmId, status },
   });
 
   return NextResponse.json(updated);
