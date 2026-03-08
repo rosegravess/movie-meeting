@@ -7,22 +7,26 @@ interface Params {
 }
 
 export async function PATCH(request: Request, { params }: Params) {
-  const { status } = (await request.json()) as { status: FilmStatus };
-  const filmId = params.id;
+  try {
+    const { status } = (await request.json()) as { status: FilmStatus };
+    const filmId = params.id;
 
-  // If setting to 'current', clear any existing current film first
-  if (status === 'current') {
-    await prisma.filmState.updateMany({
-      where: { status: 'current' },
-      data: { status: 'unwatched' },
+    if (status === 'current') {
+      await prisma.filmState.updateMany({
+        where: { status: 'current' },
+        data: { status: 'unwatched' },
+      });
+    }
+
+    const updated = await prisma.filmState.upsert({
+      where: { id: filmId },
+      update: { status },
+      create: { id: filmId, status },
     });
+
+    return NextResponse.json(updated);
+  } catch (err) {
+    console.error('[PATCH /api/films]', err);
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
-
-  const updated = await prisma.filmState.upsert({
-    where: { id: filmId },
-    update: { status },
-    create: { id: filmId, status },
-  });
-
-  return NextResponse.json(updated);
 }
