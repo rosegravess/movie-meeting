@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { FILMS } from '@/lib/data';
 import type { FilmStatus, AppState } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 async function ensureSeeded() {
   for (const film of FILMS) {
     await prisma.filmState.upsert({
