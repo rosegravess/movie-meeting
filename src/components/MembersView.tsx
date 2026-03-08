@@ -5,6 +5,8 @@ import { FILMS, MEMBERS } from '@/lib/data';
 import { getHotDog } from '@/components/FilmModal';
 import type { AppState } from '@/lib/types';
 
+interface MembersViewProps { state: AppState; }
+
 export default function MembersView({ state }: MembersViewProps) {
   const [selected, setSelected] = useState<string | null>(null);
 
