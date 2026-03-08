@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model FilmState {
+  id     String @id       // film id slug, e.g. "blade-runner"
+  status String @default("unwatched") // unwatched | current | watched
+}
+
+model Submission {
+  id        String  @id @default(cuid())
+  filmId    String
+  memberId  String  // "intro" for intro video, member id for reaction video
+  submitted Boolean @default(false)
+
+  @@unique([filmId, memberId])
+}
+
+model Week {
+  id        String   @id @default(cuid())
+  filmId    String
+  weekNum   Int
+  date      String
+  createdAt DateTime @default(now())
+}
+
+model Review {
+  id       String @id @default(cuid())
+  filmId   String
+  memberId String
+  stars    Int    // 1–5; 0 means no rating
+  text     String @default("")
+
+  @@unique([filmId, memberId])
+}
