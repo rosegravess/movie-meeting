@@ -137,7 +137,7 @@ export default function FilmModal({
             <div className="modal-meta">{film.meta}</div>
             <div className="modal-picked-by">
               Picked by{' '}
-              <span style={{ color: member.hex, fontWeight: 600 }}>{member.name}</span>
+              <span style={{ color: member.hex, fontWeight: 600 }}>{member.name} & {member.partner}</span>
             </div>
           </div>
           <button className="modal-close" onClick={onClose}>✕</button>

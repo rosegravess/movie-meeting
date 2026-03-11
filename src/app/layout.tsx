@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="footer-pip" style={{ background: 'var(--acid)' }} />
             <div className="footer-pip" style={{ background: 'var(--gold)' }} />
           </div>
-          <div className="footer-right">Dies Mercurii · Season I</div>
+          <div className="footer-right">Season I</div>
         </footer>
       </body>
     </html>

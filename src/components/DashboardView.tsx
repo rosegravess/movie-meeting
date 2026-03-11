@@ -30,7 +30,7 @@ export default function DashboardView({ state, onCardClick }: DashboardViewProps
       {/* Progress hero */}
       <div className="progress-hero">
         <div>
-          <div className="hero-eyebrow">Season I · Dies Mercurii</div>
+          <div className="hero-eyebrow">Season I</div>
           <div className="hero-title">
             Movie<br /><strong>Meeting</strong>
           </div>
@@ -81,7 +81,7 @@ export default function DashboardView({ state, onCardClick }: DashboardViewProps
             <div className="pick-title">{cur.title}</div>
             <div className="pick-meta">{cur.meta}</div>
             <div className="pick-by">
-              Picked by <span style={{ color: curMember.hex }}>{curMember.name}</span>
+              Picked by <span style={{ color: curMember.hex }}>{curMember.name} & {curMember.partner}</span>
             </div>
           </div>
           <div className="pick-week">
@@ -100,6 +100,7 @@ export default function DashboardView({ state, onCardClick }: DashboardViewProps
       <div className="couples-grid">
         {COUPLES.map((couple) => {
           const coupleMembers = couple.memberIds.map((id) => MEMBERS.find((m) => m.id === id)!);
+          const coupleFilms   = FILMS.filter((f) => couple.memberIds.includes(f.picker));
 
           return (
             <div key={couple.label} className="couple-section">
@@ -113,68 +114,53 @@ export default function DashboardView({ state, onCardClick }: DashboardViewProps
                 <span>{couple.label}</span>
               </div>
 
-              {/* Two member columns */}
-              <div className="couple-members">
-                {coupleMembers.map((member) => {
-                  const memberFilms = FILMS.filter((f) => f.picker === member.id);
-                  return (
-                    <div key={member.id} className="member-col-group member-col-inset">
-                      <div className="member-col-header">
-                        <div className="member-col-dot" style={{ background: member.hex }} />
-                        <div className="member-col-name" style={{ color: member.hex }}>
-                          {member.name}
-                        </div>
-                      </div>
+              {/* All films for this couple */}
+              {coupleFilms.map((film) => {
+                const member = getMember(film.picker)!;
+                const fs     = state.filmStates[film.id] ?? 'unwatched';
+                const subs   = state.submissions[film.id] ?? {};
 
-                      {memberFilms.map((film) => {
-                        const fs   = state.filmStates[film.id] ?? 'unwatched';
-                        const subs = state.submissions[film.id] ?? {};
+                let cardClass = 'film-card';
+                if (fs === 'current') cardClass += ' fc-current';
+                if (fs === 'watched') cardClass += ' fc-watched';
 
-                        let cardClass = 'film-card';
-                        if (fs === 'current') cardClass += ' fc-current';
-                        if (fs === 'watched') cardClass += ' fc-watched';
+                let badge: React.ReactNode = null;
+                if (fs === 'current')      badge = <div className="badge badge-pick">&#9658; Now</div>;
+                else if (fs === 'watched') badge = <div className="badge badge-done">&#10003; Seen</div>;
+                else if (film.isNew)       badge = <div className="badge badge-new">New</div>;
 
-                        let badge: React.ReactNode = null;
-                        if (fs === 'current')      badge = <div className="badge badge-pick">&#9658; Now</div>;
-                        else if (fs === 'watched') badge = <div className="badge badge-done">&#10003; Seen</div>;
-                        else if (film.isNew)       badge = <div className="badge badge-new">New</div>;
+                return (
+                  <div key={film.id} className={cardClass} onClick={() => onCardClick(film.id)}>
+                    <div className="fc-bar" style={{ background: member.hex }} />
 
-                        return (
-                          <div key={film.id} className={cardClass} onClick={() => onCardClick(film.id)}>
-                            <div className="fc-bar" style={{ background: member.hex }} />
+                    {film.tbd ? (
+                      <div className="fc-poster-tbd">?</div>
+                    ) : (
+                      <img
+                        className="fc-poster"
+                        src={`/thumbnails/${film.id}-thumbnail.png`}
+                        alt={film.title}
+                      />
+                    )}
 
-                            {film.tbd ? (
-                              <div className="fc-poster-tbd">?</div>
-                            ) : (
-                              <img
-                                className="fc-poster"
-                                src={`/thumbnails/${film.id}-thumbnail.png`}
-                                alt={film.title}
-                              />
-                            )}
-
-                            <div className="fc-body">
-                              <div className="fc-title">{film.tbd ? 'TBD' : film.title}</div>
-                              <div className="fc-sub">{film.tbd ? 'To be chosen' : film.meta}</div>
-                            </div>
-
-                            {!film.tbd && (
-                              <>
-                                <div className="fc-badges">{badge}</div>
-                                <div className="sub-dots">
-                                  {SUB_KEYS.map((k) => (
-                                    <div key={k} className={`sub-dot${subs[k] ? ' filled' : ''}`} />
-                                  ))}
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        );
-                      })}
+                    <div className="fc-body">
+                      <div className="fc-title">{film.tbd ? 'TBD' : film.title}</div>
+                      <div className="fc-sub">{film.tbd ? 'To be chosen' : film.meta}</div>
                     </div>
-                  );
-                })}
-              </div>
+
+                    {!film.tbd && (
+                      <>
+                        <div className="fc-badges">{badge}</div>
+                        <div className="sub-dots">
+                          {SUB_KEYS.map((k) => (
+                            <div key={k} className={`sub-dot${subs[k] ? ' filled' : ''}`} />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           );
         })}

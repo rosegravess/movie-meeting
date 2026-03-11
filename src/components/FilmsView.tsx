@@ -61,7 +61,7 @@ export default function FilmsView({ state, onCardClick }: FilmsViewProps) {
               {/* Bottom overlay with title */}
               <div className="film-poster-overlay" style={{ '--member-hex': member.hex } as React.CSSProperties}>
                 <div className="film-poster-title">{film.title}</div>
-                <div className="film-poster-picker" style={{ color: member.hex }}>{member.name}</div>
+                <div className="film-poster-picker" style={{ color: member.hex }}>{member.name} & {member.partner}</div>
               </div>
             </div>
           );

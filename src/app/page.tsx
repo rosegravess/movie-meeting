@@ -89,7 +89,7 @@ export default function Home() {
         setIsSpinning(false);
         const mem = getMember(pick.picker)!;
         setResultTitle(pick.title);
-        setResultSub(`${pick.meta} · Picked by ${mem.name}`);
+        setResultSub(`${pick.meta} · Picked by ${mem.name} & ${mem.partner}`);
         setResultFilmId(pick.id);
         setResultVisible(true);
         playWinner();

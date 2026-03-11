@@ -63,7 +63,7 @@ export default function DrawView({
                   {film.title}
                 </div>
                 <div className="reel-card-picker" style={{ color: fs === 'watched' ? '#2A2A3A' : member.hex + '88' }}>
-                  {member.name}
+                  {member.name} & {member.partner}
                 </div>
               </div>
             </div>
