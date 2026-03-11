@@ -45,7 +45,7 @@ export default function Home() {
 
   // ── Draw ──────────────────────────────────────────────────────────────
   const getRemaining = useCallback(
-    () => FILMS.filter((f) => !f.tbd && appState.filmStates[f.id] === 'unwatched'),
+    () => FILMS.filter((f) => !f.tbd && (appState.filmStates[f.id] ?? 'unwatched') === 'unwatched'),
     [appState.filmStates]
   );
 

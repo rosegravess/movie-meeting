@@ -23,7 +23,7 @@ export default function DrawView({
   resultVisible, resultTitle, resultSub, resultFilmId,
   onDraw, onConfirm, onRedraw, onCancel, onCardClick,
 }: DrawViewProps) {
-  const remaining = FILMS.filter((f) => !f.tbd && state.filmStates[f.id] === 'unwatched').length;
+  const remaining = FILMS.filter((f) => !f.tbd && (state.filmStates[f.id] ?? 'unwatched') === 'unwatched').length;
 
   return (
     <div>
@@ -55,7 +55,7 @@ export default function DrawView({
             >
               <img
                 className="reel-card-poster"
-                src={`/thumbnails/${film.id}-thumbnail.png`}
+                src={`/posters/${film.id}.jpg`}
                 alt={film.title}
               />
               <div className="reel-card-footer" style={{ borderTop: `2px solid ${fs === 'watched' ? 'transparent' : member.hex + '55'}` }}>
