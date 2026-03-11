@@ -18,6 +18,7 @@ interface TmdbInfo {
   director: string | null;
   dp: string | null;
   composer: string | null;
+  providers: { name: string; logo: string }[];
 }
 
 const STATUS_OPTIONS: { value: FilmStatus; label: string }[] = [
@@ -206,6 +207,25 @@ export default function FilmModal({
                             <div className="playbill-cast-as">as {c.character}</div>
                           )}
                         </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                {/* Streaming providers */}
+                {tmdb.providers.length > 0 && (
+                  <>
+                    <div className="playbill-rule"><span>◆</span></div>
+                    <div className="playbill-role" style={{ textAlign: 'center', marginBottom: 10 }}>Stream on</div>
+                    <div className="providers-row">
+                      {tmdb.providers.map((p) => (
+                        <img
+                          key={p.name}
+                          className="provider-logo"
+                          src={p.logo}
+                          alt={p.name}
+                          title={p.name}
+                        />
                       ))}
                     </div>
                   </>

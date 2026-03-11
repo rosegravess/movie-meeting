@@ -489,6 +489,16 @@ body {
   font-family: 'Syne Mono', monospace; font-size: 6.5px; letter-spacing: 0.5px;
   text-transform: uppercase; color: var(--mid);
 }
+.providers-row {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+  margin-bottom: 4px;
+}
+.provider-logo {
+  width: 36px; height: 36px; border-radius: 8px;
+  object-fit: cover; opacity: 0.85;
+  transition: opacity 0.15s;
+}
+.provider-logo:hover { opacity: 1; }
 
 /* ══ RATINGS IN MODAL ══ */
 .ratings-grid { display: flex; flex-direction: column; gap: 10px; }

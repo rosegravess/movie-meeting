@@ -27,14 +27,15 @@ export async function GET(
   const tmdbId = searchData.results?.[0]?.id;
   if (!tmdbId) return NextResponse.json({ error: 'Not found on TMDB' }, { status: 404 });
 
-  // 2 — fetch credits
-  const creditsRes = await fetch(
-    `${BASE}/movie/${tmdbId}/credits?api_key=${KEY}`,
-    { next: { revalidate: 86400 } }
-  );
+  // 2 — fetch credits + watch providers in parallel
+  const [creditsRes, providersRes] = await Promise.all([
+    fetch(`${BASE}/movie/${tmdbId}/credits?api_key=${KEY}`, { next: { revalidate: 86400 } }),
+    fetch(`${BASE}/movie/${tmdbId}/watch/providers?api_key=${KEY}`, { next: { revalidate: 86400 } }),
+  ]);
   if (!creditsRes.ok) return NextResponse.json({ error: 'TMDB credits failed' }, { status: 502 });
 
   const credits = await creditsRes.json();
+  const providersData = providersRes.ok ? await providersRes.json() : null;
 
   const cast = (credits.cast ?? [])
     .slice(0, 6)
@@ -46,10 +47,18 @@ export async function GET(
   const crewFind = (job: string) =>
     (credits.crew ?? []).find((c: { job: string; name: string }) => c.job === job)?.name ?? null;
 
+  const flatrate: { provider_name: string; logo_path: string }[] =
+    providersData?.results?.US?.flatrate ?? [];
+  const providers = flatrate.map((p) => ({
+    name: p.provider_name,
+    logo: `https://image.tmdb.org/t/p/original${p.logo_path}`,
+  }));
+
   return NextResponse.json({
     cast,
     director:  crewFind('Director'),
     dp:        crewFind('Director of Photography'),
     composer:  crewFind('Original Music Composer'),
+    providers,
   });
 }
