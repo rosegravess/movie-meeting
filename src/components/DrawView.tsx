@@ -23,7 +23,7 @@ export default function DrawView({
   resultVisible, resultTitle, resultSub, resultFilmId,
   onDraw, onConfirm, onRedraw, onCancel, onCardClick,
 }: DrawViewProps) {
-  const remaining = FILMS.filter((f) => state.filmStates[f.id] === 'unwatched').length;
+  const remaining = FILMS.filter((f) => !f.tbd && state.filmStates[f.id] === 'unwatched').length;
 
   return (
     <div>

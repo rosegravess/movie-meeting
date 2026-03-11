@@ -194,8 +194,9 @@ body {
 
 /* ══ REEL / DRAW VIEW ══ */
 .reel-grid {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
-  margin-bottom: 20px;
+  display: grid; grid-template-columns: repeat(3, clamp(80px, 18vh, 175px));
+  justify-content: center; gap: 8px;
+  margin: 0 auto 20px;
   perspective: 800px;
 }
 .reel-card {
