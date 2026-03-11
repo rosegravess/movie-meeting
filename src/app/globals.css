@@ -194,7 +194,7 @@ body {
 
 /* ══ REEL / DRAW VIEW ══ */
 .reel-grid {
-  display: grid; grid-template-columns: repeat(6,1fr); gap: 8px;
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
   margin-bottom: 28px;
   perspective: 800px;
 }
@@ -233,10 +233,10 @@ body {
   60%  { transform: rotateY(270deg) scale(1.08); }
   100% { transform: rotateY(360deg) scale(1.06); }
 }
-.reel-card-poster { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
-.reel-card-footer { padding: 7px 9px; display: flex; flex-direction: column; gap: 2px; }
-.reel-card-title { font-family: 'Cormorant Garamond', serif; font-size: 11px; font-weight: 700; color: var(--chrome); line-height: 1.2; }
-.reel-card-picker { font-family: 'Syne Mono', monospace; font-size: 7px; letter-spacing: 1px; text-transform: uppercase; }
+.reel-card-poster { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; }
+.reel-card-footer { padding: 10px 12px; display: flex; flex-direction: column; gap: 3px; }
+.reel-card-title { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 700; color: var(--chrome); line-height: 1.2; }
+.reel-card-picker { font-family: 'Syne Mono', monospace; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
 
 /* ── DRAW BUTTON AREA ── */
 .draw-area {
@@ -593,7 +593,7 @@ body {
 /* ══ RESPONSIVE ══ */
 @media (max-width: 900px) {
   .couples-grid { grid-template-columns: 1fr; }
-  .reel-grid    { grid-template-columns: repeat(4,1fr); }
+  .reel-grid    { grid-template-columns: repeat(3,1fr); }
   .members-view-grid { grid-template-columns: 1fr; }
   .films-view-grid { grid-template-columns: repeat(3,1fr); }
 }
@@ -602,7 +602,7 @@ body {
   .main { padding: 24px 20px 60px; }
   .couples-grid { grid-template-columns: 1fr; }
   .couple-members { grid-template-columns: 1fr; }
-  .reel-grid    { grid-template-columns: repeat(2,1fr); }
+  .reel-grid    { grid-template-columns: repeat(2,1fr); gap: 8px; }
   .progress-hero { grid-template-columns: 1fr; }
   .hero-title { font-size: 32px; }
   .modal { width: 100%; border-radius: 10px 10px 0 0; }
